@@ -76,7 +76,7 @@ function MonthCalendar({ year, month, data, selectedDay, onDayClick }: {
   const startDow = (first.getDay()+6)%7;
   const cells: (number|null)[] = [...Array(startDow).fill(null), ...Array.from({length:last.getDate()},(_,i)=>i+1)];
   while (cells.length%7!==0) cells.push(null);
-  const today = new Date().toISOString().split("T")[0];
+  const today = format(new Date(), "yyyy-MM-dd");
   return (
     <div>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:"3px", marginBottom:"6px" }}>
@@ -144,9 +144,10 @@ export default function MoodPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
+      const clientDate = format(new Date(), "yyyy-MM-dd");
       const [allRes, todayRes] = await Promise.all([
         api.get("/mood?limit=365"),
-        api.get("/mood/today"),
+        api.get(`/mood/today?client_date=${clientDate}`),
       ]);
       setLogs(allRes.data);
       setTodayLog(todayRes.data);

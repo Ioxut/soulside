@@ -46,10 +46,18 @@ def create_mood_log(data: MoodLogCreate, db: Session = Depends(get_db), current_
 
 
 @router.get("/today", response_model=MoodLogOut | None)
-def get_today_log(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_today_log(
+    client_date: str | None = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        today = date.fromisoformat(client_date) if client_date else date.today()
+    except ValueError:
+        today = date.today()
     return db.query(MoodLog).filter(
         MoodLog.user_id == current_user.id,
-        MoodLog.logged_date == date.today()
+        MoodLog.logged_date == today
     ).first()
 
 
@@ -91,7 +99,7 @@ def update_mood_log(log_id: int, data: MoodLogCreate, db: Session = Depends(get_
     log = db.query(MoodLog).filter(MoodLog.id == log_id, MoodLog.user_id == current_user.id).first()
     if not log:
         raise HTTPException(status_code=404, detail="Înregistrare negăsită")
-    if log.logged_date != date.today():
+    if log.logged_date != data.logged_date:
         raise HTTPException(status_code=403, detail="Poți edita doar înregistrarea din ziua curentă")
     for key, value in data.model_dump().items():
         setattr(log, key, value)
