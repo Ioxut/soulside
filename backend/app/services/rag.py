@@ -1,7 +1,15 @@
 import asyncio
+import unicodedata
 from sqlalchemy.orm import Session
 from app.models.document import DocumentChunk
 from app.services.embeddings import embed_text
+
+
+def _strip_diacritics(text: str) -> str:
+    return "".join(
+        c for c in unicodedata.normalize("NFD", text)
+        if unicodedata.category(c) != "Mn"
+    )
 
 _SLEEP_KEYWORDS = {"dorm", "somn", "insomnie", "adorm", "trezesc", "noapte", "obosit", "oboseala"}
 _ANXIETY_KEYWORDS = {"anxietate", "panica", "atac de panica", "ingrijorat", "fric", "fobie", "neliniste"}
@@ -10,7 +18,7 @@ _STRESS_KEYWORDS = {"stres", "coplesit", "burnout", "epuizat", "tensiune", "pres
 
 
 def _expand_query(query: str) -> str:
-    lower = query.lower()
+    lower = _strip_diacritics(query.lower())
     expansions = []
     if any(kw in lower for kw in _SLEEP_KEYWORDS):
         expansions.append("igienă somn calitate somn insomnie sfaturi somn sănătos")
