@@ -33,20 +33,33 @@ def _expand_query(query: str) -> str:
     return query + " " + " ".join(expansions)
 
 
+# If the raw query already retrieves a chunk this similar, expansion is skipped.
+# Matches the source display threshold: no point expanding when the base query
+# already surfaces a citable chunk; expanding can dilute an already-precise query.
+_EXPANSION_TRIGGER = 0.60
+
+
 async def retrieve_context(query: str, db: Session, top_k: int = 5, threshold: float = 0.12):
-    expanded_query = _expand_query(query)
     loop = asyncio.get_event_loop()
-    query_embedding = await loop.run_in_executor(None, embed_text, expanded_query)
 
-    distance_col = DocumentChunk.embedding.cosine_distance(query_embedding)
+    async def _search(q: str):
+        embedding = await loop.run_in_executor(None, embed_text, q)
+        distance_col = DocumentChunk.embedding.cosine_distance(embedding)
+        return (
+            db.query(DocumentChunk, distance_col.label("distance"))
+            .filter(distance_col < (1 - threshold))
+            .order_by(distance_col)
+            .limit(top_k)
+            .all()
+        )
 
-    results = (
-        db.query(DocumentChunk, distance_col.label("distance"))
-        .filter(distance_col < (1 - threshold))
-        .order_by(distance_col)
-        .limit(top_k)
-        .all()
-    )
+    # Retrieve with the raw query first; expand only if that base retrieval is weak.
+    results = await _search(query)
+    base_top_similarity = (1 - results[0][1]) if results else 0.0
+    if base_top_similarity < _EXPANSION_TRIGGER:
+        expanded_query = _expand_query(query)
+        if expanded_query != query:
+            results = await _search(expanded_query)
 
     if not results:
         return "", []
