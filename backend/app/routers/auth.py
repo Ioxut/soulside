@@ -8,6 +8,7 @@ from app.models.user import User, OTPToken
 from app.schemas.user import (
     UserRegister, UserLogin, OTPVerify, UserOut, UserUpdate,
     ForgotPasswordRequest, ResetPasswordRequest, VerifyResetCodeRequest, ChangePasswordRequest,
+    ResendOTPRequest,
 )
 from app.utils.security import (
     hash_password, verify_password,
@@ -22,6 +23,20 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 _MAX_LOGIN_ATTEMPTS = 5
 _LOCKOUT_MINUTES = 15
+_OTP_EXPIRE_MINUTES = 10
+
+
+def _issue_otp(db: Session, user: User) -> None:
+    """Generate a fresh 6-digit OTP for the user and email it via Resend."""
+    code = "".join(random.choices(string.digits, k=6))
+    otp = OTPToken(
+        user_id=user.id,
+        code=code,
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=_OTP_EXPIRE_MINUTES),
+    )
+    db.add(otp)
+    db.commit()
+    send_otp_email(user.email, user.name, code)
 
 
 def _set_auth_cookies(response: Response, user: User) -> None:
@@ -55,26 +70,34 @@ def _clear_auth_cookies(response: Response) -> None:
     response.delete_cookie(key="refresh_token", path="/")
 
 
-@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 @limiter.limit("10/hour")
-def register(request: Request, data: UserRegister, response: Response, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == data.email).first():
-        raise HTTPException(status_code=400, detail="Email-ul este deja înregistrat")
+def register(request: Request, data: UserRegister, db: Session = Depends(get_db)):
+    existing = db.query(User).filter(User.email == data.email).first()
+    if existing:
+        if existing.is_verified:
+            raise HTTPException(status_code=400, detail="Email-ul este deja înregistrat")
+        # Account exists but was never verified: refresh credentials and re-send a code.
+        existing.name = data.name
+        existing.hashed_password = hash_password(data.password)
+        db.commit()
+        db.refresh(existing)
+        user = existing
+    else:
+        is_first_user = db.query(User).count() == 0
+        user = User(
+            email=data.email,
+            name=data.name,
+            hashed_password=hash_password(data.password),
+            is_admin=is_first_user,
+            is_verified=False,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
-    is_first_user = db.query(User).count() == 0
-    user = User(
-        email=data.email,
-        name=data.name,
-        hashed_password=hash_password(data.password),
-        is_admin=is_first_user,
-        is_verified=True,
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    _set_auth_cookies(response, user)
-    return user
+    _issue_otp(db, user)
+    return {"email": user.email, "message": "Cont creat. Verifică email-ul pentru codul de confirmare."}
 
 
 @router.post("/verify-otp", response_model=UserOut)
@@ -165,23 +188,13 @@ def logout(
 
 
 @router.post("/resend-otp")
-def resend_otp(email: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Utilizator negăsit")
-    if user.is_verified:
-        raise HTTPException(status_code=400, detail="Contul este deja verificat")
-
-    code = "".join(random.choices(string.digits, k=6))
-    otp = OTPToken(
-        user_id=user.id,
-        code=code,
-        expires_at=datetime.now(timezone.utc) + timedelta(minutes=10),
-    )
-    db.add(otp)
-    db.commit()
-    send_otp_email(user.email, user.name, code)
-    return {"message": "Cod nou trimis"}
+@limiter.limit("3/10minutes")
+def resend_otp(request: Request, data: ResendOTPRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
+    if user and not user.is_verified:
+        _issue_otp(db, user)
+    # Generic response — never reveal whether the email exists or is already verified.
+    return {"message": "Dacă există un cont neconfirmat, vei primi un cod nou."}
 
 
 @router.post("/forgot-password")

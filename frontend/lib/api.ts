@@ -8,7 +8,7 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-const AUTH_SKIP = ["/auth/login", "/auth/register", "/auth/verify-otp", "/auth/refresh"];
+const AUTH_SKIP = ["/auth/login", "/auth/register", "/auth/verify-otp", "/auth/resend-otp", "/auth/refresh"];
 
 let refreshing: Promise<void> | null = null;
 

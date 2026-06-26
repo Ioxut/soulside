@@ -180,10 +180,8 @@ def drop_embedding_index(db: Session = Depends(get_db), _: User = Depends(get_ad
 @router.get("/debug/retrieve")
 def debug_retrieve(q: str, db: Session = Depends(get_db), _: User = Depends(get_admin_user)):
     from app.services.embeddings import embed_text
-    from app.services.rag import _expand_query
 
-    expanded = _expand_query(q)
-    query_embedding = embed_text(expanded)
+    query_embedding = embed_text(q)
     distance_col = DocumentChunk.embedding.cosine_distance(query_embedding)
 
     results = (
@@ -225,8 +223,7 @@ def debug_retrieve(q: str, db: Session = Depends(get_db), _: User = Depends(get_
         ]
 
     return {
-        "original_query": q,
-        "expanded_query": expanded,
+        "query": q,
         "top10_global": all_results,
         "nih_sleep_guide_top5": nih_results,
     }

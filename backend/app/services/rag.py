@@ -1,41 +1,10 @@
 import asyncio
-import unicodedata
 from sqlalchemy.orm import Session
 from app.models.document import DocumentChunk
 from app.services.embeddings import embed_text
+from app.services.ai import expand_query_llm
 
 
-def _strip_diacritics(text: str) -> str:
-    return "".join(
-        c for c in unicodedata.normalize("NFD", text)
-        if unicodedata.category(c) != "Mn"
-    )
-
-_SLEEP_KEYWORDS = {"dorm", "somn", "insomnie", "adorm", "trezesc", "noapte", "obosit", "oboseala"}
-_ANXIETY_KEYWORDS = {"anxietate", "panica", "atac de panica", "ingrijorat", "fric", "fobie", "neliniste"}
-_DEPRESSION_KEYWORDS = {"depresie", "trist", "tristete", "deprimat", "motivatie", "gol", "nu mai vreau"}
-_STRESS_KEYWORDS = {"stres", "coplesit", "burnout", "epuizat", "tensiune", "presiune"}
-
-
-def _expand_query(query: str) -> str:
-    lower = _strip_diacritics(query.lower())
-    expansions = []
-    if any(kw in lower for kw in _SLEEP_KEYWORDS):
-        expansions.append("igienă somn calitate somn insomnie sfaturi somn sănătos")
-    if any(kw in lower for kw in _ANXIETY_KEYWORDS):
-        expansions.append("tulburare anxietate terapie cognitiv comportamentală tehnici relaxare")
-    if any(kw in lower for kw in _DEPRESSION_KEYWORDS):
-        expansions.append("depresie simptome tratament intervenție psihologică")
-    if any(kw in lower for kw in _STRESS_KEYWORDS):
-        expansions.append("managementul stresului tehnici coping reducere stres")
-    if not expansions:
-        return query
-    return query + " " + " ".join(expansions)
-
-
-# If the raw query already retrieves a chunk this similar, expansion is skipped.
-# Matches the source display threshold: no point expanding when the base query
-# already surfaces a citable chunk; expanding can dilute an already-precise query.
 _EXPANSION_TRIGGER = 0.60
 
 
@@ -53,11 +22,10 @@ async def retrieve_context(query: str, db: Session, top_k: int = 5, threshold: f
             .all()
         )
 
-    # Retrieve with the raw query first; expand only if that base retrieval is weak.
     results = await _search(query)
     base_top_similarity = (1 - results[0][1]) if results else 0.0
     if base_top_similarity < _EXPANSION_TRIGGER:
-        expanded_query = _expand_query(query)
+        expanded_query = await expand_query_llm(query)
         if expanded_query != query:
             results = await _search(expanded_query)
 

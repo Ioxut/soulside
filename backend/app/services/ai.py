@@ -37,13 +37,37 @@ Context clinic disponibil:
 {context}"""
 
 
-def get_llm(streaming: bool = False) -> ChatGroq:
+def get_llm(streaming: bool = False, temperature: float = 0.7) -> ChatGroq:
     return ChatGroq(
         api_key=settings.GROQ_API_KEY,
         model=settings.GROQ_MODEL,
         streaming=streaming,
-        temperature=0.7,
+        temperature=temperature,
     )
+
+
+_QUERY_REWRITE_SYSTEM = (
+    "Reformulează întrebarea unui utilizator despre sănătate mintală într-un set de "
+    "termeni și expresii clinice relevante, folosite pentru a regăsi pasaje din documente "
+    "de specialitate. Răspunde DOAR cu 5-10 termeni clinici separați prin spațiu, fără "
+    "explicații și fără propoziții. Poți folosi și termeni în engleză, fiindcă documentele "
+    "pot fi în engleză."
+)
+
+
+async def expand_query_llm(query: str) -> str:
+    """Expandare dinamică a interogării: cere modelului termeni clinici pentru întrebare
+    și îi adaugă la interogarea originală. La orice eroare, întoarce interogarea originală."""
+    try:
+        llm = get_llm(streaming=False, temperature=0.2)
+        response = await llm.ainvoke([
+            SystemMessage(content=_QUERY_REWRITE_SYSTEM),
+            HumanMessage(content=query),
+        ])
+        terms = " ".join(response.content.split())
+        return f"{query} {terms}" if terms else query
+    except Exception:
+        return query
 
 
 async def stream_chat_response(

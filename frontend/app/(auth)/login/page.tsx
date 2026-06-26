@@ -30,6 +30,12 @@ export default function LoginPage() {
       const next = searchParams.get("next") || "/dashboard";
       router.push(next);
     } catch (err: any) {
+      if (err.response?.status === 403) {
+        // Account exists but was never verified → send a fresh code and finish sign-up.
+        toast("Contul nu este verificat. Îți trimitem un cod nou.");
+        router.push(`/register?verify=1&email=${encodeURIComponent(email)}`);
+        return;
+      }
       setError(err.response?.data?.detail || "Autentificare eșuată. Verifică datele.");
     } finally {
       setLoading(false);

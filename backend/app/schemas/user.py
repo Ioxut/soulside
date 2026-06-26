@@ -50,6 +50,10 @@ class VerifyResetCodeRequest(BaseModel):
     code: str
 
 
+class ResendOTPRequest(BaseModel):
+    email: EmailStr
+
+
 class ResetPasswordRequest(BaseModel):
     email: EmailStr
     code: str
