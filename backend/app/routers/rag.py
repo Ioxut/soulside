@@ -1,3 +1,4 @@
+import asyncio
 import json
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -8,7 +9,7 @@ from app.models.chat import ChatSession, ChatMessage, MessageSource
 from app.models.document import SourceDocument
 from app.schemas.chat import ChatRequest
 from app.schemas.document import SourceDocumentOut
-from app.services.rag import retrieve_context
+from app.services.rag import retrieve_context, filter_grounded_sources
 from app.services.ai import stream_chat_response
 from app.deps import get_current_user
 
@@ -74,8 +75,11 @@ async def chat_stream(
             DISPLAY_THRESHOLD = 0.60
             MAX_SOURCES = 3
             display_sources = [s for s in sources if s.get("similarity", 0) >= DISPLAY_THRESHOLD][:MAX_SOURCES]
+            loop = asyncio.get_event_loop()
+            display_sources = await loop.run_in_executor(None, filter_grounded_sources, assistant_content, display_sources)
 
             for src in display_sources:
+                src.pop("embedding", None)
                 save_db.add(MessageSource(
                     message_id=assistant_msg.id,
                     filename=src.get("filename", ""),

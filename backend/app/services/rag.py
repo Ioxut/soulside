@@ -43,6 +43,35 @@ async def retrieve_context(query: str, db: Session, top_k: int = 5, threshold: f
         key = (filename, chunk.page_number)
         if key not in seen:
             seen.add(key)
-            sources.append({"filename": filename, "page": chunk.page_number, "similarity": similarity})
+            sources.append({
+                "filename": filename,
+                "page": chunk.page_number,
+                "similarity": similarity,
+                "embedding": list(chunk.embedding) if chunk.embedding is not None else None,
+            })
 
     return "\n\n---\n\n".join(context_parts), sources
+
+
+# O sursă este citată doar dacă răspunsul generat este chiar ancorat în ea.
+# Un răspuns conversațional generic nu seamănă cu niciun fragment clinic, deci nu citează nimic.
+_GROUNDING_THRESHOLD = 0.45
+
+
+def filter_grounded_sources(answer: str, sources: list) -> list:
+    if not answer.strip() or not sources:
+        return sources
+    try:
+        answer_embedding = embed_text(answer)
+    except Exception:
+        return sources
+    grounded = []
+    for s in sources:
+        emb = s.get("embedding")
+        if not emb:
+            grounded.append(s)
+            continue
+        score = sum(a * b for a, b in zip(answer_embedding, emb))
+        if score >= _GROUNDING_THRESHOLD:
+            grounded.append(s)
+    return grounded

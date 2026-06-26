@@ -38,12 +38,22 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const recognitionRef = useRef<any>(null);
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
   useEffect(() => {
     return () => {
       recognitionRef.current?.abort();
       window.speechSynthesis?.cancel();
     };
+  }, []);
+
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    const load = () => { voicesRef.current = synth.getVoices(); };
+    load();
+    synth.addEventListener?.("voiceschanged", load);
+    return () => synth.removeEventListener?.("voiceschanged", load);
   }, []);
 
   useEffect(() => {
@@ -253,8 +263,19 @@ export default function ChatPage() {
     if (speakingId === msg.id) { window.speechSynthesis.cancel(); setSpeakingId(null); return; }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(msg.content);
-    u.lang = "ro-RO"; u.rate = 0.9; u.onend = () => setSpeakingId(null);
-    window.speechSynthesis.speak(u); setSpeakingId(msg.id);
+    u.lang = "ro-RO";
+    const voices = voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices();
+    const roVoices = voices.filter(v => v.lang?.toLowerCase().startsWith("ro"));
+    const ro = roVoices.find(v => !v.localService) || roVoices[0];
+    if (ro) {
+      u.voice = ro;
+    } else {
+      toast("Nu există o voce românească în acest browser. Pentru cea mai bună calitate, folosește Chrome sau instalează pachetul de limbă română.", { icon: "🔊" });
+    }
+    u.rate = 0.95;
+    u.onend = () => setSpeakingId(null);
+    window.speechSynthesis.speak(u);
+    setSpeakingId(msg.id);
   };
 
   const newChat = () => {
