@@ -270,7 +270,7 @@ export default function ChatPage() {
     if (ro) {
       u.voice = ro;
     } else {
-      toast("Nu există o voce românească în acest browser. Pentru cea mai bună calitate, folosește Chrome sau instalează pachetul de limbă română.", { icon: "🔊" });
+      toast("Nu există o voce românească în acest browser. Pentru cea mai bună calitate, folosește Chrome sau instalează pachetul de limbă română.");
     }
     u.rate = 0.95;
     u.onend = () => setSpeakingId(null);
