@@ -55,7 +55,7 @@ async def retrieve_context(query: str, db: Session, top_k: int = 5, threshold: f
 
 # O sursă este citată doar dacă răspunsul generat este chiar ancorat în ea.
 # Un răspuns conversațional generic nu seamănă cu niciun fragment clinic, deci nu citează nimic.
-_GROUNDING_THRESHOLD = 0.45
+_GROUNDING_THRESHOLD = 0.52
 
 
 def filter_grounded_sources(answer: str, sources: list) -> list:
