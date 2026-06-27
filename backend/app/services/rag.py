@@ -75,3 +75,10 @@ def filter_grounded_sources(answer: str, sources: list) -> list:
         if score >= _GROUNDING_THRESHOLD:
             grounded.append(s)
     return grounded
+
+_SENSITIVE_PATTERNS = ("suicide", "suicid", "self-harm", "selfharm", "self harm")
+
+
+def is_sensitive_source(filename: str) -> bool:
+    low = (filename or "").lower()
+    return any(p in low for p in _SENSITIVE_PATTERNS)

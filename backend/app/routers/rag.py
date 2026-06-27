@@ -9,7 +9,7 @@ from app.models.chat import ChatSession, ChatMessage, MessageSource
 from app.models.document import SourceDocument
 from app.schemas.chat import ChatRequest
 from app.schemas.document import SourceDocumentOut
-from app.services.rag import retrieve_context, filter_grounded_sources
+from app.services.rag import retrieve_context, filter_grounded_sources, is_sensitive_source
 from app.services.ai import stream_chat_response
 from app.deps import get_current_user
 
@@ -77,6 +77,7 @@ async def chat_stream(
             display_sources = [s for s in sources if s.get("similarity", 0) >= DISPLAY_THRESHOLD][:MAX_SOURCES]
             loop = asyncio.get_event_loop()
             display_sources = await loop.run_in_executor(None, filter_grounded_sources, assistant_content, display_sources)
+            display_sources = [s for s in display_sources if not is_sensitive_source(s.get("filename", ""))]
 
             for src in display_sources:
                 src.pop("embedding", None)

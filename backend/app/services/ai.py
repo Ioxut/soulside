@@ -51,7 +51,8 @@ _QUERY_REWRITE_SYSTEM = (
     "termeni și expresii clinice relevante, folosite pentru a regăsi pasaje din documente "
     "de specialitate. Răspunde DOAR cu 5-10 termeni clinici separați prin spațiu, fără "
     "explicații și fără propoziții. Poți folosi și termeni în engleză, fiindcă documentele "
-    "pot fi în engleză."
+    "pot fi în engleză. Folosește strict termeni legați de subiectul explicit al mesajului; "
+    "nu adăuga termeni despre suicid, auto-vătămare sau criză dacă utilizatorul nu i-a menționat."
 )
 
 
