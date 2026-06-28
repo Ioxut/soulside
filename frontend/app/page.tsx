@@ -37,7 +37,7 @@ const GlobalStyles = () => (
     .btn-nav-shine:hover { color: #fff; background: rgba(255, 255, 255, 0.06); border-color: rgba(139, 92, 246, 0.35); box-shadow: 0 0 16px rgba(139, 92, 246, 0.15); }
     .btn-nav-shine:hover::after { left: 200%; }
 
-    .gradient-text { color:#f1f0f5; -webkit-text-fill-color:#f1f0f5; text-decoration-line:underline; text-decoration-color:#8b5cf6; text-decoration-thickness:0.07em; text-underline-offset:0.15em; }
+    .gradient-text { background:linear-gradient(135deg,#a78bfa 0%,#7c3aed 50%,#c4b5fd 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
     section { position:relative; }
 
@@ -354,7 +354,7 @@ function HowItWorksSection() {
     <div style={{ marginBottom: isMobile ? 40 : 64, textAlign: "left" }}>
       <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, letterSpacing: "-1px", lineHeight: 1.1, fontFamily: "var(--font-display)" }}>
         Cum funcționează{" "}
-        <span className="gradient-text">SoulSide</span>
+        <span style={{ background: "linear-gradient(135deg,#a78bfa,#7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>SoulSide</span>
       </h2>
     </div>
   );
@@ -378,7 +378,7 @@ function HowItWorksSection() {
                     <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg,#8b5cf6,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", flexShrink: 0 }}>
                       {step.icon}
                     </div>
-                    <div style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, color: "rgba(139,92,246,0.5)" }}>
+                    <div style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-2px", lineHeight: 1, background: "linear-gradient(135deg,rgba(139,92,246,0.7),rgba(124,58,237,0.3))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                       {step.num}
                     </div>
                   </div>
@@ -448,7 +448,7 @@ function HowItWorksSection() {
                       <div style={{ width: 64, height: 64, borderRadius: 18, background: "linear-gradient(135deg,#8b5cf6,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", marginBottom: 20 }}>
                         {HOW_STEPS[activeStep].icon}
                       </div>
-                      <div style={{ fontSize: "clamp(44px,6vw,68px)", fontWeight: 900, letterSpacing: "-3px", lineHeight: 1, color: "rgba(139,92,246,0.45)", marginBottom: 14 }}>
+                      <div style={{ fontSize: "clamp(44px,6vw,68px)", fontWeight: 900, letterSpacing: "-3px", lineHeight: 1, background: "linear-gradient(135deg,rgba(139,92,246,0.55),rgba(124,58,237,0.18))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", marginBottom: 14 }}>
                         {HOW_STEPS[activeStep].num}
                       </div>
                       <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 12, color: "#f1f0f5", fontFamily: "var(--font-display)" }}>{HOW_STEPS[activeStep].title}</h3>
