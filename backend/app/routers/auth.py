@@ -77,7 +77,6 @@ def register(request: Request, data: UserRegister, db: Session = Depends(get_db)
     if existing:
         if existing.is_verified:
             raise HTTPException(status_code=400, detail="Email-ul este deja înregistrat")
-        # Account exists but was never verified: refresh credentials and re-send a code.
         existing.name = data.name
         existing.hashed_password = hash_password(data.password)
         db.commit()
@@ -193,7 +192,6 @@ def resend_otp(request: Request, data: ResendOTPRequest, db: Session = Depends(g
     user = db.query(User).filter(User.email == data.email).first()
     if user and not user.is_verified:
         _issue_otp(db, user)
-    # Generic response — never reveal whether the email exists or is already verified.
     return {"message": "Dacă există un cont neconfirmat, vei primi un cod nou."}
 
 

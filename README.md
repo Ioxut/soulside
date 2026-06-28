@@ -2,7 +2,7 @@
 
 **Platformă AI de sănătate mentală** — chat conversațional cu RAG, tracker emoțional, jurnal zilnic, resurse curate și conectare cu specialiști.
 
-> FastAPI · Next.js 16 · PostgreSQL/pgvector · Groq · Deployat pe Railway + Vercel
+> FastAPI · Next.js 16 · PostgreSQL/pgvector · Groq · Deployat pe Oracle Cloud + Neon
 
 ---
 
@@ -27,7 +27,7 @@
 | **Bază de date** | PostgreSQL 16 + pgvector |
 | **AI / RAG** | Groq API, LangChain, HuggingFace `sentence-transformers` |
 | **Email** | Resend |
-| **Deployment** | Railway (backend), Vercel (frontend), Neon (bază de date) |
+| **Deployment** | Oracle Cloud (VM Ampere A1, Ubuntu) — backend via systemd/uvicorn, frontend via pm2; Neon (PostgreSQL managed); nginx reverse proxy + TLS Let's Encrypt |
 
 ---
 

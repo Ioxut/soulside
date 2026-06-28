@@ -61,7 +61,6 @@ function DetailPanel({ s, onOpen }: { s: ChatSession; onOpen: () => void }) {
 
   return (
     <>
-      {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", paddingBottom: "16px", borderBottom: "1px solid var(--border)" }}>
         <div style={{ width: "40px", height: "40px", borderRadius: "var(--r-md)", background: "var(--accent-subtle)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <MessageCircle size={18} color="var(--accent-light)" strokeWidth={1.6} />
@@ -72,7 +71,6 @@ function DetailPanel({ s, onOpen }: { s: ChatSession; onOpen: () => void }) {
         </div>
       </div>
 
-      {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "18px" }}>
         {[
           { label: "MESAJE", value: String(s.message_count) },
@@ -85,7 +83,6 @@ function DetailPanel({ s, onOpen }: { s: ChatSession; onOpen: () => void }) {
         ))}
       </div>
 
-      {/* First message */}
       {s.first_message && (
         <div style={{ padding: "14px", background: "var(--glass-1)", border: "1px solid var(--border)", borderRadius: "var(--r-md)", marginBottom: "18px" }}>
           <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em", fontFamily: "var(--font-display)", fontWeight: 700, marginBottom: "8px" }}>Prima întrebare</div>
@@ -133,10 +130,8 @@ export default function ChatHistoryPage() {
 
   const handleCardClick = (s: ChatSession) => {
     if (isMobile) {
-      // accordion: toggle on mobile
       setSelected(prev => prev?.id === s.id ? null : s);
     } else {
-      // right panel: always open on desktop
       setSelected(s);
     }
   };
@@ -166,7 +161,6 @@ export default function ChatHistoryPage() {
 
         return (
           <div key={s.id} className={`anim-fade-up delay-${Math.min(i + 1, 4)}`}>
-            {/* Card row */}
             <div
               onClick={() => handleCardClick(s)}
               style={{
@@ -197,13 +191,11 @@ export default function ChatHistoryPage() {
                     <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>{s.message_count} mesaje</span>
                   </div>
                 </div>
-                {/* Chevron — mobile only */}
                 {isMobile && (
                   <div style={{ flexShrink: 0, color: "var(--text-muted)", transition: "transform var(--t-normal)", transform: isSelected ? "rotate(180deg)" : "rotate(0deg)", display: "flex", alignItems: "center" }}>
                     <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 8l5 5 5-5" /></svg>
                   </div>
                 )}
-                {/* Delete button */}
                 <button
                   onClick={e => deleteSession(s.id, e)}
                   style={{ width: "30px", height: "30px", flexShrink: 0, borderRadius: "var(--r-sm)", border: "1px solid var(--border)", background: "transparent", color: "var(--text-muted)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all var(--t-fast)" }}
@@ -215,7 +207,6 @@ export default function ChatHistoryPage() {
               </div>
             </div>
 
-            {/* Accordion panel — mobile only, inline below card */}
             {showAccordion && (
               <div
                 className="anim-fade-up"
@@ -250,7 +241,6 @@ export default function ChatHistoryPage() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "minmax(0,1fr)" : "minmax(0,1fr) minmax(0,1fr)", gap: "20px", width: "100%" }}>
-        {/* LEFT: always visible */}
         <div style={{ minWidth: 0, overflow: "hidden" }}>
           <div className="anim-fade-up delay-1" style={{ position: "relative", marginBottom: "14px" }}>
             <div style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)", pointerEvents: "none" }}>
@@ -261,7 +251,6 @@ export default function ChatHistoryPage() {
           {cardList}
         </div>
 
-        {/* RIGHT: desktop only */}
         {!isMobile && (
           <div className="history-right" style={{ position: "sticky", top: "24px", height: "fit-content" }}>
             {selected ? (

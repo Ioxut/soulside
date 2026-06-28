@@ -71,7 +71,6 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // ── Step 1: send code ──────────────────────────────────────────────────────
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) { toast.error("Introdu adresa de email"); return; }
@@ -143,7 +142,6 @@ export default function ForgotPasswordPage() {
       <div className="glass-card-raised anim-scale-in"
         style={{ width: "100%", maxWidth: "420px", padding: "clamp(24px,4vw,36px) clamp(20px,4vw,32px)", position: "relative", zIndex: 1 }}>
 
-        {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
           <img src="/logo.png" alt="SoulSide" style={{ width: "40px", height: "40px", borderRadius: "var(--r-xl)", objectFit: "cover", flexShrink: 0 }} />
           <div>
@@ -183,7 +181,6 @@ export default function ForgotPasswordPage() {
           </>
         )}
 
-        {/* ── STEP 1: Cod OTP ── */}
         {step === 1 && (
           <>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "20px",
@@ -234,7 +231,6 @@ export default function ForgotPasswordPage() {
           </>
         )}
 
-        {/* ── STEP 2: Parolă nouă ── */}
         {step === 2 && (
           <>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "20px",
@@ -281,7 +277,6 @@ export default function ForgotPasswordPage() {
           </>
         )}
 
-        {/* ── STEP 3: Gata ── */}
         {step === 3 && (
           <div style={{ textAlign: "center", padding: "12px 0" }}>
             <div style={{ width: "56px", height: "56px", borderRadius: "16px",

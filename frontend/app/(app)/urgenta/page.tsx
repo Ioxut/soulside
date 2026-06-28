@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Square, Wind, Eye, HeartPulse, PenLine, Ear, Hand, Flower2, Utensils, Clock, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-// ─── Static data ──────────────────────────────────────────────────────────────
 
 const LINES = [
   { name: "Urgențe naționale", number: "112", desc: "Situații de urgență - viață în pericol", color: "#f87171", urgent: true },
@@ -18,7 +17,6 @@ const RESOURCES = [
   { name: "Minte Forte", url: "https://minteforte.ro", desc: "Articole, ghiduri și resurse despre sănătatea mintală în română" },
 ];
 
-// ─── Exercise catalogue ───────────────────────────────────────────────────────
 
 type ExerciseId = "478" | "box" | "sigh" | "grounding" | "bodyscan" | "writing";
 
@@ -41,7 +39,6 @@ const TECHNIQUES: Technique[] = [
   { id: "writing",   title: "Scrie ce simți",          time: "5 min", icon: PenLine,    color: "#fbbf24", animated: false, desc: "Scrie tot ce îți trece prin cap, fără să te oprești. Nu trebuie să fie frumos, doar sincer." },
 ];
 
-// ─── Breathing engine ─────────────────────────────────────────────────────────
 
 type Phase = { label: string; duration: number; scale: number; ease: string };
 
@@ -115,7 +112,6 @@ function BreathingExercise({ id, onBack }: { id: string; onBack: () => void }) {
         <div style={{ fontSize: "17px", fontWeight: 800, fontFamily: "var(--font-display)", color: "var(--text-primary)" }}>{info.title}</div>
       </div>
 
-      {/* Circle */}
       <div style={{ position: "relative", width: "190px", height: "190px", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <motion.div
           key={started ? `ring-${pi}` : "ring-idle"}
@@ -132,7 +128,6 @@ function BreathingExercise({ id, onBack }: { id: string; onBack: () => void }) {
         <div style={{ position: "relative", zIndex: 1, fontSize: "28px", fontWeight: 900, fontFamily: "var(--font-display)", color: "white" }}>{started ? tl : ""}</div>
       </div>
 
-      {/* Label */}
       <div style={{ textAlign: "center", minHeight: "44px" }}>
         <div style={{ fontSize: "19px", fontWeight: 800, fontFamily: "var(--font-display)", color: running ? color : "var(--text-muted)" }}>
           {running ? phase.label : started ? "Pauză" : "Pregătit?"}
@@ -140,7 +135,6 @@ function BreathingExercise({ id, onBack }: { id: string; onBack: () => void }) {
         {rounds > 0 && <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "3px" }}>Runde: {rounds}</div>}
       </div>
 
-      {/* Controls */}
       <div style={{ display: "flex", gap: "10px" }}>
         {!running
           ? <button onClick={handleStart}
@@ -159,7 +153,6 @@ function BreathingExercise({ id, onBack }: { id: string; onBack: () => void }) {
   );
 }
 
-// ─── 5-4-3-2-1 Grounding ──────────────────────────────────────────────────────
 
 const SENSES = [
   { count: 5, sense: "VEZI",         icon: Eye,      color: "#8b5cf6" },
@@ -218,7 +211,6 @@ function GroundingExercise({ onBack }: { onBack: () => void }) {
       style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "18px", padding: "4px 0 12px" }}>
       {backBtn}
 
-      {/* Progress dots */}
       <div style={{ display: "flex", gap: "8px" }}>
         {SENSES.map((sx, i) => (
           <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i < si ? "var(--success)" : i === si ? s.color : "var(--border)", transition: "all 0.3s" }} />
@@ -250,7 +242,6 @@ function GroundingExercise({ onBack }: { onBack: () => void }) {
   );
 }
 
-// ─── Body Scan ────────────────────────────────────────────────────────────────
 
 const BODY_PARTS = [
   { part: "Cap și frunte",    text: "Simte fruntea. Dacă e încordată, las-o pur și simplu să se înmoaie." },
@@ -321,7 +312,6 @@ function BodyScanExercise({ onBack }: { onBack: () => void }) {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function UrgentaPage() {
   const [active, setActive] = useState<ExerciseId | null>(null);
@@ -339,7 +329,6 @@ export default function UrgentaPage() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "24px" }}>
 
-        {/* ── Left column ── */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div>
             <h2 className="section-title">Linii de urgență</h2>
@@ -382,10 +371,8 @@ export default function UrgentaPage() {
           </div>
         </div>
 
-        {/* ── Right column ── */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
 
-          {/* Techniques / active exercise */}
           <div className="glass-card" style={{ padding: "20px", minHeight: "420px", display: "flex", flexDirection: "column" }}>
             <AnimatePresence mode="wait">
               {active ? (
@@ -395,7 +382,7 @@ export default function UrgentaPage() {
                   )}
                   {active === "grounding" && <GroundingExercise onBack={() => setActive(null)} />}
                   {active === "bodyscan"  && <BodyScanExercise  onBack={() => setActive(null)} />}
-                  {active === "writing"   && null /* guarded by animated:false */}
+                  {active === "writing"   && null}
                 </motion.div>
               ) : (
                 <motion.div key="cards" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -429,7 +416,6 @@ export default function UrgentaPage() {
             </AnimatePresence>
           </div>
 
-          {/* 112 — always visible */}
           <div style={{ padding: "20px", background: "var(--danger-bg)", border: "1px solid var(--danger-border)", borderRadius: "var(--r-xl)", position: "sticky", top: "24px" }}>
             <div style={{ fontSize: "14px", fontWeight: 800, fontFamily: "var(--font-display)", color: "var(--danger)", marginBottom: "10px" }}>Gânduri de autovătămare?</div>
             <p style={{ fontSize: "13px", color: "rgba(248,113,113,0.85)", lineHeight: 1.65, marginBottom: "14px" }}>Sunați imediat la 112 sau mergeți la cel mai apropiat spital. Nu sunteți singur.</p>

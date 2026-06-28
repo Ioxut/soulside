@@ -49,24 +49,20 @@ export default function AdminPage() {
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  // Content
   const [content, setContent] = useState<ContentItem[]>([]);
   const [showContentForm, setShowContentForm] = useState(false);
   const [editingContent, setEditingContent] = useState<ContentItem | null>(null);
   const [contentForm, setContentForm] = useState(CONTENT_FORM_DEFAULT);
 
-  // Doctors
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [showDoctorForm, setShowDoctorForm] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   const [doctorForm, setDoctorForm] = useState(DOCTOR_FORM_DEFAULT);
 
-  // Content PDF upload
   const contentFileRef = useRef<HTMLInputElement>(null);
   const [contentFile, setContentFile] = useState<File | null>(null);
   const [uploadingContent, setUploadingContent] = useState(false);
 
-  // Requests
   const [requests, setRequests] = useState<SpecialistRequest[]>([]);
   const [requestDoctorFilter, setRequestDoctorFilter] = useState<number | "all">("all");
   const [requestDoctors, setRequestDoctors] = useState<Doctor[]>([]);
@@ -144,7 +140,6 @@ export default function AdminPage() {
     e.preventDefault();
     try {
       let finalForm = { ...contentForm };
-      // Upload PDF file first if selected
       if (contentForm.type === "pdf" && contentFile) {
         setUploadingContent(true);
         const fd = new FormData(); fd.append("file", contentFile);
@@ -223,13 +218,11 @@ export default function AdminPage() {
   return (
     <div style={{ padding: "clamp(16px,4vw,40px)", width: "100%" }}>
 
-      {/* Header */}
       <div className="anim-fade-up" style={{ marginBottom: "24px" }}>
         <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "clamp(20px,4vw,28px)", color: "var(--text-primary)", letterSpacing: "-0.025em", marginBottom: "6px" }}>Panou admin</h1>
         <p style={{ fontSize: "14px", color: "var(--text-muted)" }}>Gestionează baza de cunoștințe și conținutul platformei.</p>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: "flex", gap: "4px", marginBottom: "24px", background: "var(--glass-1)", border: "1px solid var(--border)", borderRadius: "var(--r-lg)", padding: "4px", width: "fit-content", flexWrap: "wrap", maxWidth: "100%" }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
@@ -239,7 +232,6 @@ export default function AdminPage() {
         ))}
       </div>
 
-      {/* ── STATS TAB ── */}
       {tab === "stats" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: "16px" }}>
           {loading ? (
@@ -263,10 +255,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── DOCUMENTS TAB ── */}
       {tab === "documents" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {/* Upload zone */}
           <div className="glass-card"
             onClick={() => !uploading && fileRef.current?.click()}
             onDragOver={e => { e.preventDefault(); setDragOver(true); }}
@@ -295,7 +285,6 @@ export default function AdminPage() {
             )}
           </div>
 
-          {/* Table */}
           <div className="glass-card" style={{ overflow: "hidden" }}>
             <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px", flexWrap: "wrap" }}>
               <h2 className="section-title" style={{ marginBottom: 0 }}>Documente active ({docs.length})</h2>
@@ -368,10 +357,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── CONTENT TAB ── */}
       {tab === "content" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* Add / form toggle */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button className={showContentForm && !editingContent ? "btn-glass" : "btn-primary"} style={{ height: "40px", padding: "0 18px", fontSize: "14px" }}
               onClick={() => {
@@ -382,14 +369,12 @@ export default function AdminPage() {
             </button>
           </div>
 
-          {/* Inline form — dynamic per type */}
           {showContentForm && (
             <div className="glass-card anim-fade-up" style={{ padding: "24px" }}>
               <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "15px", color: "var(--text-primary)", marginBottom: "18px" }}>
                 {editingContent ? "Editează conținut" : "Conținut nou"}
               </h3>
               <form onSubmit={saveContent} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                {/* Type selector — always shown */}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "12px" }}>
                   <div>
                     <label className="field-label">Tip</label>
@@ -418,19 +403,16 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Title — always shown */}
                 <div>
                   <label className="field-label">Titlu</label>
                   <input value={contentForm.title} onChange={e => setContentForm({ ...contentForm, title: e.target.value })} required style={inp}/>
                 </div>
 
-                {/* Description — always shown */}
                 <div>
                   <label className="field-label">Descriere</label>
                   <textarea value={contentForm.description} onChange={e => setContentForm({ ...contentForm, description: e.target.value })} rows={3} required style={{ ...inp, height: "auto", padding: "10px 12px", resize: "vertical" }}/>
                 </div>
 
-                {/* VIDEO: just URL */}
                 {contentForm.type === "video" && (
                   <div>
                     <label className="field-label">URL Video</label>
@@ -438,7 +420,6 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                {/* ARTICOL EXTERN / GHID: just URL */}
                 {(contentForm.type === "articol_extern" || contentForm.type === "ghid") && (
                   <div>
                     <label className="field-label">URL {contentForm.type === "ghid" ? "Ghid" : "Articol"}</label>
@@ -446,7 +427,6 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                {/* PDF: file upload */}
                 {contentForm.type === "pdf" && (
                   <div>
                     <label className="field-label">Fișier PDF</label>
@@ -459,7 +439,6 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                {/* ARTICOL (internal): author + read_time + full content */}
                 {contentForm.type === "articol" && (
                   <>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "12px" }}>
@@ -498,7 +477,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Table */}
           <div className="glass-card" style={{ overflow: "hidden" }}>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "520px" }}>
@@ -551,10 +529,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── DOCTORS TAB ── */}
       {tab === "doctors" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* Add / form toggle */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button className={showDoctorForm && !editingDoctor ? "btn-glass" : "btn-primary"} style={{ height: "40px", padding: "0 18px", fontSize: "14px" }}
               onClick={() => {
@@ -565,7 +541,6 @@ export default function AdminPage() {
             </button>
           </div>
 
-          {/* Inline form */}
           {showDoctorForm && (
             <div className="glass-card anim-fade-up" style={{ padding: "24px" }}>
               <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "15px", color: "var(--text-primary)", marginBottom: "18px" }}>
@@ -611,7 +586,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Cards grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: "12px" }}>
             {loading ? [1,2,3].map(i => <div key={i} className="glass-card" style={{ height: "100px", animation: "pulse 1.5s ease-in-out infinite" }}/>) :
             doctors.map(d => {
@@ -646,10 +620,8 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ── REQUESTS TAB ── */}
       {tab === "requests" && (
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          {/* Doctor filter */}
           {requestDoctors.length > 0 && (
             <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
               <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-display)", fontWeight: 600 }}>Filtru doctor:</span>
@@ -709,7 +681,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Delete doc confirm modal */}
       {deleteDocId !== null && (
         <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
           <div className="glass-card-raised anim-scale-in" style={{ maxWidth: "380px", width: "100%", padding: "28px", textAlign: "center" }}>

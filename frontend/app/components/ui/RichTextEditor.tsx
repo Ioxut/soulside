@@ -6,10 +6,8 @@ import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import { useEffect, useCallback } from "react";
 
-// Convert legacy plain-text (newline-separated) to HTML paragraphs
 function plainTextToHtml(text: string): string {
   if (!text) return "";
-  // If it already looks like HTML, return as-is
   if (/<[a-z][\s\S]*>/i.test(text)) return text;
   return text
     .split(/\n{2,}/)
@@ -70,7 +68,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        // Disable heading levels 4-6, keep only 1-3
         heading: { levels: [1, 2, 3] },
         horizontalRule: {},
         bulletList: {},
@@ -104,11 +101,9 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     },
   });
 
-  // Sync external value changes (e.g. form reset or edit load)
   useEffect(() => {
     if (!editor) return;
     const incoming = plainTextToHtml(value);
-    // Only update if content actually differs to avoid cursor jumps
     if (editor.getHTML() !== incoming) {
       editor.commands.setContent(incoming);
     }
@@ -118,7 +113,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     if (!editor) return;
     const prev = editor.getAttributes("link").href ?? "";
     const url = window.prompt("URL link:", prev);
-    if (url === null) return; // cancelled
+    if (url === null) return;
     if (url === "") {
       editor.chain().focus().unsetLink().run();
     } else {
@@ -138,14 +133,12 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       background: "var(--glass-1)",
       overflow: "hidden",
     }}>
-      {/* Toolbar */}
       <div style={{
         display: "flex", flexWrap: "wrap", alignItems: "center",
         gap: "4px", padding: "8px 12px",
         borderBottom: "1px solid var(--border)",
         background: "var(--glass-2)",
       }}>
-        {/* Text style */}
         <ToolbarButton active={active("bold")} onClick={() => editor.chain().focus().toggleBold().run()} title="Bold (Ctrl+B)">
           <strong>B</strong>
         </ToolbarButton>
@@ -158,7 +151,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
         <Divider />
 
-        {/* Headings */}
         <ToolbarButton active={active("heading", { level: 1 })} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} title="Heading 1">
           H1
         </ToolbarButton>
@@ -171,7 +163,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
         <Divider />
 
-        {/* Lists */}
         <ToolbarButton active={active("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()} title="Bullet list">
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <circle cx="3" cy="5" r="1.2" fill="currentColor" stroke="none"/>
@@ -191,7 +182,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
         <Divider />
 
-        {/* Link */}
         <ToolbarButton active={active("link")} onClick={setLink} title="Adaugă link">
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M8 11a4 4 0 006 0l2-2a4 4 0 00-6-6L9 4"/>
@@ -201,14 +191,12 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
         <Divider />
 
-        {/* Horizontal rule */}
         <ToolbarButton active={false} onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Linie orizontală">
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M3 10h14"/>
           </svg>
         </ToolbarButton>
 
-        {/* Undo / redo */}
         <div style={{ marginLeft: "auto", display: "flex", gap: "4px" }}>
           <ToolbarButton disabled={!editor.can().undo()} active={false} onClick={() => editor.chain().focus().undo().run()} title="Undo (Ctrl+Z)">
             <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -225,7 +213,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         </div>
       </div>
 
-      {/* Editor area */}
       <div
         style={{ position: "relative" }}
         data-placeholder={!editor.getText() ? (placeholder ?? "Scrie conținutul articolului...") : undefined}

@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sqlalchemy.orm import Session
 from app.models.document import SourceDocument, DocumentChunk

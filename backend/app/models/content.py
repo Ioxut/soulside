@@ -9,7 +9,7 @@ class ContentItem(Base):
     __tablename__ = "content_items"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    type: Mapped[str] = mapped_column(String(20), nullable=False)  # articol, video, pdf, ghid
+    type: Mapped[str] = mapped_column(String(20), nullable=False)
     title: Mapped[str] = mapped_column(String(512), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     category: Mapped[str] = mapped_column(String(100), nullable=False)

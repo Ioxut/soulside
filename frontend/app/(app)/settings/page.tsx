@@ -20,18 +20,15 @@ export default function SettingsPage() {
   const { user, setUser, logout } = useAuthStore();
   const [section, setSection] = useState("profile");
 
-  /* Profile */
   const [name, setName] = useState(user?.name ?? "");
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar_url ?? "");
   const [avatarError, setAvatarError] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  /* Security */
   const [passwords, setPasswords] = useState({ current: "", newP: "", confirm: "" });
   const [changingPass, setChangingPass] = useState(false);
 
-  /* Danger */
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -90,7 +87,6 @@ export default function SettingsPage() {
 
       <div style={{ display: "flex", gap: "20px", alignItems: "start", flexWrap: "wrap" }}>
 
-        {/* Tabs — horizontal on mobile, vertical on desktop */}
         <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2px", width: "100%" }} className="settings-tabs-mobile">
           <style>{`
             @media (min-width: 640px) {
@@ -107,10 +103,8 @@ export default function SettingsPage() {
           ))}
         </div>
 
-        {/* Panel */}
         <div className="glass-card settings-panel" style={{ width: "100%", padding: "clamp(16px,4vw,28px)" }}>
 
-          {/* PROFILE */}
           {section === "profile" && (
             <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
@@ -122,7 +116,6 @@ export default function SettingsPage() {
                 )}
               </div>
 
-              {/* Avatar preview */}
               <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
                 <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: (avatarUrl && !avatarError) ? "transparent" : "linear-gradient(135deg,var(--accent),var(--accent-deep))", border: "2px solid var(--border-strong)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", boxShadow: "0 0 20px var(--accent-glow)", flexShrink: 0 }}>
                   {(avatarUrl && !avatarError)
@@ -153,7 +146,6 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {/* SECURITY */}
           {section === "security" && (
             <form onSubmit={handleChangePassword} className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
               <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "17px", color: "var(--text-primary)" }}>Securitate cont</h2>
@@ -176,7 +168,6 @@ export default function SettingsPage() {
             </form>
           )}
 
-          {/* NOTIFICATIONS */}
           {section === "notifs" && (
             <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px", flexWrap: "wrap" }}>
@@ -205,7 +196,6 @@ export default function SettingsPage() {
             </div>
           )}
 
-          {/* DANGER */}
           {section === "danger" && (
             <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
               <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "17px", color: "var(--text-primary)" }}>Gestionare cont</h2>
@@ -224,7 +214,6 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* Delete modal */}
       {showDeleteModal && (
         <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
           <div className="glass-card-raised anim-scale-in" style={{ maxWidth: "400px", width: "100%", padding: "28px" }}>

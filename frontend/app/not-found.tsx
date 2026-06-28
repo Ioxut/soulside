@@ -15,7 +15,6 @@ export default function NotFound() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", maxWidth: "480px", width: "100%" }}
       >
-        {/* Logo */}
         <motion.img
           src="/logo.png"
           alt="SoulSide"
@@ -25,7 +24,6 @@ export default function NotFound() {
           style={{ width: "clamp(56px,10vw,72px)", height: "clamp(56px,10vw,72px)", borderRadius: "20px", objectFit: "cover", marginBottom: "28px", boxShadow: "0 0 40px rgba(139,92,246,0.45)" }}
         />
 
-        {/* 404 */}
         <motion.p
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -42,7 +40,6 @@ export default function NotFound() {
           Pagina pe care o cauți s-a rătăcit undeva prin univers. Întoarce-te într-un loc sigur.
         </p>
 
-        {/* Buttons */}
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
           <Link href="/dashboard" style={{ textDecoration: "none", flex: "1 1 auto", minWidth: "140px", maxWidth: "200px" }}>
             <motion.button

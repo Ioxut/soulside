@@ -16,17 +16,14 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # Add reset token fields to users
     op.add_column("users", sa.Column("reset_token", sa.String(64), nullable=True))
     op.add_column("users", sa.Column("reset_token_expires_at", sa.DateTime(), nullable=True))
 
-    # Add status to specialist_requests
     op.add_column(
         "specialist_requests",
         sa.Column("status", sa.String(20), server_default="pending", nullable=False),
     )
 
-    # Create notifications table
     op.create_table(
         "notifications",
         sa.Column("id", sa.Integer(), primary_key=True),
