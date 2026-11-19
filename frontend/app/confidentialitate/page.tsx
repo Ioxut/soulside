@@ -29,7 +29,7 @@ const SECTIONS = [
   {
     title: "Cu cine le partajăm",
     content: [
-      "Groq Inc. (SUA) procesează textul conversațiilor pentru a genera răspunsuri AI. Resend Inc. (SUA) trimite emailurile de verificare și recuperare parolă. Neon Inc. (SUA) stochează baza de date PostgreSQL. Oracle Cloud Infrastructure găzduiește serverul backend. Vercel Inc. (SUA) găzduiește frontendul aplicației.",
+      "Groq Inc. (SUA) procesează textul conversațiilor pentru a genera răspunsuri AI. Resend Inc. (SUA) trimite emailurile de verificare și recuperare parolă. Neon Inc. (SUA) stochează baza de date PostgreSQL. Oracle Cloud Infrastructure găzduiește serverul pe care rulează aplicația (frontend și backend).",
       "Transferurile către companii din SUA au loc pe baza Clauzelor Contractuale Standard aprobate de Comisia Europeană. Nu vindem datele tale.",
     ],
   },
