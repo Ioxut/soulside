@@ -246,7 +246,7 @@ function SpecialistMockup() {
     <div style={{ background: "rgba(11,10,30,0.75)", border: "1px solid rgba(139,92,246,0.25)", borderRadius: 20, backdropFilter: "blur(20px)", padding: "24px", display: "flex", flexDirection: "column", gap: 18 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <Users size={15} color="#a78bfa" />
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#f1f0f5" }}>Specialist disponibil</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#f1f0f5" }}>Exemplu de specialist</span>
       </div>
 
       <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
@@ -326,8 +326,8 @@ function FeatureCard({ icon, color, title, desc, delay = 0 }: { icon: React.Reac
 
 const HOW_STEPS = [
   { num: "01", icon: <MessageCircle size={32} />, title: "Exprimă-te liber", desc: "Scrie-i lui SoulSide despre ce simți, exact așa cum i-ai scrie unui prieten. Fie că ai o zi proastă sau un moment de anxietate, SoulSide e punctul tău de pornire." },
-  { num: "02", icon: <Heart size={32} />, title: "Primește ghidare imediată", desc: "SoulSide analizează mesajul prin baza sa de surse validate și îți oferă un răspuns potrivit plus soluții clare, cum ar fi tehnici pas cu pas de calmare sau respirație." },
-  { num: "03", icon: <Brain size={32} />, title: "Continuă oricând discuția", desc: "Tot contextul tău este reținut. Când te întorci a doua zi, nu trebuie să o iei de la capăt — SoulSide își amintește perfect unde ați rămas și continuă progresul." },
+  { num: "02", icon: <Heart size={32} />, title: "Primește ghidare imediată", desc: "SoulSide analizează mesajul, caută în documentele de specialitate din baza de cunoștințe și îți oferă un răspuns plus soluții clare, cum ar fi tehnici pas cu pas de calmare sau respirație." },
+  { num: "03", icon: <Brain size={32} />, title: "Continuă oricând discuția", desc: "Conversațiile tale sunt salvate. Când revii, poți deschide o discuție mai veche și poți continua de unde ai rămas." },
 ];
 
 function HowItWorksSection() {
@@ -592,20 +592,20 @@ export default function LandingPage() {
   }, []);
 
   const FEATURES = [
-    { icon: <Brain size={26} />, color: "#8b5cf6", title: "Chat AI", desc: "Tehnologia RAG accesează în timp real peste 30 de documente și surse validate. Astfel, primești sfaturi sigure, verificate și adaptate constant la necesitățile tale." },
-    { icon: <Shield size={26} />, color: "#06b6d4", title: "Securitate Completă", desc: "JWT în httpOnly cookies, criptare bcrypt, date criptate end-to-end. Informațiile tale nu sunt niciodată vândute sau partajate cu terți." },
-    { icon: <Heart size={26} />, color: "#ec4899", title: "Empatic", desc: "SoulSide îți reține povestea și te ascultă fără să judece vreodată. Fiecare discuție continuă natural de unde ai rămas, 24/7, pentru un suport emoțional cu adevărat continuu." },
+    { icon: <Brain size={26} />, color: "#8b5cf6", title: "Chat AI", desc: "Tehnologia RAG caută în timp real în peste 30 de documente de specialitate, iar sub fiecare răspuns vezi sursa folosită." },
+    { icon: <Shield size={26} />, color: "#06b6d4", title: "Securitate", desc: "Parolele sunt stocate cu bcrypt, sesiunile folosesc JWT în cookie-uri httpOnly, iar toată comunicarea e criptată prin HTTPS. Nu vindem datele tale." },
+    { icon: <Heart size={26} />, color: "#ec4899", title: "Empatic", desc: "SoulSide te ascultă fără să judece. Conversațiile tale sunt salvate, așa că poți relua oricând o discuție de unde ai rămas, la orice oră." },
     { icon: <BarChart2 size={26} />, color: "#f59e0b", title: "Jurnal de Dispoziție", desc: "Înregistrează emoțiile zilnic pe un calendar vizual. Descoperă tipare, urmărești progresul și primești insight-uri personalizate în timp real." },
     { icon: <Wind size={26} />, color: "#10b981", title: "Exerciții de Urgență", desc: "Respirație 4-7-8, box breathing, grounding 5-4-3-2-1, body scan ghidat. Instrumente clinice la un click distanță, oricând ai nevoie." },
-    { icon: <Users size={26} />, color: "#a78bfa", title: "Specialiști Verificați", desc: "Treci de la asistentul tău AI la un specialist real: alege din rețeaua noastră de psihologi și psihiatri și programează-te direct din aplicație." },
+    { icon: <Users size={26} />, color: "#a78bfa", title: "Specialiști", desc: "Când ai nevoie de mai mult decât asistentul AI, găsești în aplicație un director de psihologi și psihiatri și le poți trimite o cerere de programare." },
   ];
 
   const FAQS = [
-    { question: "Datele mele sunt private și securizate?", answer: "Absolut. Folosim JWT în httpOnly cookies, criptare bcrypt pentru parole și criptare end-to-end pentru mesaje. Datele tale nu sunt niciodată vândute, partajate cu terți sau folosite pentru antrenarea altor modele fără consimțământul tău explicit." },
-    { question: "Ce este tehnologia RAG și cum mă ajută?", answer: "RAG (Retrieval-Augmented Generation) permite sistemului să scaneze în timp real peste 30 de documente și surse validate. Astfel, răspunsurile și exercițiile pe care ți le recomandă SoulSide nu sunt doar generate automat, ci sunt bazate pe tehnici psihologice reale, sigure și verificate." },
-    { question: "SoulSide înlocuiește un terapeut uman?", answer: "Nu. SoulSide este un instrument de suport complementar, nu un înlocuitor al terapiei profesionale. Te ajutăm să procesezi emoțiile zilnic și să rămâi conectat la starea ta mintală, și îți facilităm accesul la specialiști verificați atunci când ai nevoie." },
+    { question: "Datele mele sunt private și securizate?", answer: "Parolele sunt stocate cu bcrypt, sesiunile folosesc JWT în cookie-uri httpOnly, iar toată comunicarea e criptată prin HTTPS. Nu vindem datele tale și nu le folosim pentru antrenarea modelelor. Textul conversațiilor e procesat de Groq pentru a genera răspunsurile. Detalii găsești în Politica de confidențialitate." },
+    { question: "Ce este tehnologia RAG și cum mă ajută?", answer: "RAG (Retrieval-Augmented Generation) înseamnă că, înainte să răspundă, SoulSide caută în peste 30 de documente de specialitate și folosește pasajele relevante. Răspunsurile și exercițiile recomandate se bazează pe aceste surse, iar sursa e afișată sub mesaj. SoulSide nu înlocuiește însă un specialist." },
+    { question: "SoulSide înlocuiește un terapeut uman?", answer: "Nu. SoulSide este un instrument de suport complementar, nu un înlocuitor al terapiei profesionale. Te ajutăm să procesezi emoțiile zilnic și să rămâi conectat la starea ta mintală, și îți facilităm accesul la specialiști atunci când ai nevoie." },
     { question: "Este disponibil 24/7, chiar și noaptea?", answer: "Da. SoulSide rulează non-stop. Fie că ai o criză de anxietate la 3 dimineața sau vrei să-ți înregistrezi starea înainte de somn - AI-ul și exercițiile de urgență sunt întotdeauna disponibile." },
-    { question: "Cum pot contacta un specialist prin aplicație?", answer: "În secțiunea Specialiști, poți naviga printre psihologi și psihiatri verificați, le poți vedea profilul și specialitățile, și poți trimite o cerere de consultație." },
+    { question: "Cum pot contacta un specialist prin aplicație?", answer: "În secțiunea Specialiști poți vedea profilul și specialitățile psihologilor și psihiatrilor din director și le poți trimite o cerere de consultație." },
   ];
 
   const NAV_LINKS = [
