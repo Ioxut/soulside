@@ -213,7 +213,7 @@ export default function ResourcesPage() {
 
       <div className="anim-fade-up" style={{ marginBottom: "28px" }}>
         <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 900, fontSize: "clamp(20px,4vw,28px)", color: "var(--text-primary)", letterSpacing: "-0.025em", marginBottom: "6px" }}>Bibliotecă de resurse</h1>
-        <p style={{ fontSize: "14px", color: "var(--text-muted)" }}>Articole, ghiduri și materiale clinice validate</p>
+        <p style={{ fontSize: "14px", color: "var(--text-muted)" }}>Articole, ghiduri și materiale de specialitate</p>
       </div>
 
       {counts && (
