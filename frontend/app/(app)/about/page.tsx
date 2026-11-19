@@ -5,10 +5,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import api from "@/lib/api";
 
 const VALUES = [
-  { title: "Confidențialitate", desc: "Datele tale sunt criptate și nu sunt accesibile terților." },
-  { title: "Transparență",      desc: "Fiecare răspuns vine cu sursa citată. Nu inventăm, nu presupunem." },
+  { title: "Confidențialitate", desc: "Comunicarea e criptată prin HTTPS, parolele sunt stocate cu bcrypt și nu vindem datele tale." },
+  { title: "Transparență",      desc: "Fiecare răspuns vine cu sursa citată, ca să poți verifica de unde provine informația." },
   { title: "Empatie",           desc: "Fiecare interacție e caldă, non-judecativă și susținătoare." },
-  { title: "Acuratețe clinică", desc: "Validat de specialiști, bazat exclusiv pe literatura medicală." },
+  { title: "Surse de specialitate", desc: "Răspunsurile se bazează pe documentele de specialitate din baza de cunoștințe." },
 ];
 
 const TIMELINE = [
