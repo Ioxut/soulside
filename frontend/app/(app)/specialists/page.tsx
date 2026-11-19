@@ -79,7 +79,6 @@ export default function SpecialistsPage() {
         <p style={{ fontSize:"14px", color:"var(--text-muted)" }}>Conectează-te cu psihologi și psihiatri verificați.</p>
       </div>
 
-      {/* Steps */}
       <div className="anim-fade-up delay-1" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1px", background:"var(--border)", borderRadius:"var(--r-xl)", overflow:"hidden", marginBottom:"28px" }}>
         {STEPS.map(({ n, title, desc }) => (
           <div key={n} style={{ padding:"18px 22px", background:"var(--glass-1)", backdropFilter:"blur(20px)" }}>
@@ -92,7 +91,6 @@ export default function SpecialistsPage() {
 
       <div className="specialist-grid" style={{ display:"grid", gridTemplateColumns:"1fr 360px", gap:"24px", alignItems:"start" }}>
 
-        {/* LEFT */}
         <div>
           <div style={{ position:"relative", marginBottom:"12px" }}>
             <div style={{ position:"absolute", left:"14px", top:"50%", transform:"translateY(-50%)", color:"var(--text-muted)", pointerEvents:"none" }}>
@@ -140,7 +138,6 @@ export default function SpecialistsPage() {
             </div>
           )}
 
-          {/* My requests */}
           {myRequests.length > 0 && (
             <div style={{ marginTop:"28px" }}>
               <h2 className="section-title">Cererile mele</h2>
@@ -162,7 +159,6 @@ export default function SpecialistsPage() {
           )}
         </div>
 
-        {/* RIGHT: form */}
         <div className="spec-sticky" style={{ position:"sticky", top:"24px" }}>
           <div className="glass-card-raised" style={{ padding:"24px" }}>
             {sent ? (

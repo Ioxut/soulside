@@ -5,10 +5,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import api from "@/lib/api";
 
 const VALUES = [
-  { title: "Confidențialitate", desc: "Datele tale sunt criptate și nu sunt accesibile terților." },
-  { title: "Transparență",      desc: "Fiecare răspuns vine cu sursa citată. Nu inventăm, nu presupunem." },
+  { title: "Confidențialitate", desc: "Comunicarea e criptată prin HTTPS, parolele sunt stocate cu bcrypt și nu vindem datele tale." },
+  { title: "Transparență",      desc: "Fiecare răspuns vine cu sursa citată, ca să poți verifica de unde provine informația." },
   { title: "Empatie",           desc: "Fiecare interacție e caldă, non-judecativă și susținătoare." },
-  { title: "Acuratețe clinică", desc: "Validat de specialiști, bazat exclusiv pe literatura medicală." },
+  { title: "Surse de specialitate", desc: "Răspunsurile se bazează pe documentele de specialitate din baza de cunoștințe." },
 ];
 
 const TIMELINE = [
@@ -28,7 +28,6 @@ function cleanFilename(name: string) {
   return name.replace(/\.pdf$/i, "").replace(/[-_]/g, " ");
 }
 
-// ── 3D scroll card for timeline ───────────────────────────────────────────────
 function TimelineCard({ item, index }: { item: typeof TIMELINE[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
@@ -43,7 +42,6 @@ function TimelineCard({ item, index }: { item: typeof TIMELINE[0]; index: number
         display: "flex", gap: "0", alignItems: "stretch",
         opacity: item.future ? 0.65 : 1,
       }}>
-        {/* Left: dot + line */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "20px", flexShrink: 0 }}>
           <div style={{
             width: "14px", height: "14px", borderRadius: "50%", flexShrink: 0, marginTop: "4px",
@@ -63,7 +61,6 @@ function TimelineCard({ item, index }: { item: typeof TIMELINE[0]; index: number
           )}
         </div>
 
-        {/* Right: card */}
         <div className="glass-card" style={{
           flex: 1, padding: "16px 20px", marginBottom: "16px",
           borderStyle: item.future ? "dashed" : "solid",
@@ -116,7 +113,6 @@ export default function AboutPage() {
   return (
     <div style={{ width: "100%", minHeight: "100%" }}>
 
-      {/* ── Hero ── */}
       <div style={{ ...sec }}>
         <div className="anim-fade-up">
           <div style={{ display: "inline-block", padding: "4px 14px", borderRadius: "var(--r-full)",
@@ -138,7 +134,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Valori ── */}
       <div style={{ ...sec }}>
         <h2 className="section-title anim-fade-up">Valorile noastre</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: "14px" }}>
@@ -153,7 +148,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Timeline ── */}
       <div style={{ ...sec }}>
         <h2 className="section-title anim-fade-up">Povestea noastră</h2>
         <div style={{ maxWidth: "560px" }}>
@@ -163,7 +157,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Echipa ── */}
       <div style={{ ...sec }}>
         <h2 className="section-title anim-fade-up">Echipa</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,240px))", gap: "14px" }}>
@@ -185,7 +178,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Surse ── */}
       <div style={{ padding: "clamp(28px,4vw,48px) clamp(16px,4vw,48px)" }}>
         <h2 className="section-title anim-fade-up">Surse medicale utilizate</h2>
 
@@ -220,7 +212,6 @@ export default function AboutPage() {
           </div>
         )}
 
-        {/* gap explicit between list and disclaimer */}
         <div style={{ height: "8px" }} />
 
         <div style={{ padding: "16px 20px", background: "var(--danger-bg)",

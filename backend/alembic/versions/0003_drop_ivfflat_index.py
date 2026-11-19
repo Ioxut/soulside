@@ -15,9 +15,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # IVFFlat with lists=100 and probes=1 causes ~99% of vectors to be skipped.
-    # For a small corpus (<10k rows) exact cosine search (seq scan) is both faster
-    # and perfectly accurate. Drop the approximate index entirely.
     op.execute("DROP INDEX IF EXISTS document_chunks_embedding_idx")
 
 

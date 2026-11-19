@@ -10,7 +10,6 @@ const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/reset-password
 
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  // Accept either cookie — if only refresh_token exists, the client axios interceptor will renew access_token
   const hasSession = request.cookies.has("access_token") || request.cookies.has("refresh_token");
 
   const isProtected = PROTECTED.some((p) => pathname === p || pathname.startsWith(p + "/"));

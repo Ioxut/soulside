@@ -11,7 +11,7 @@ class ChatSession(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     title: Mapped[str] = mapped_column(String(255), default="Conversație nouă")
-    sentiment: Mapped[str] = mapped_column(String(20), default="neutru")  # pozitiv, neutru, negativ
+    sentiment: Mapped[str] = mapped_column(String(20), default="neutru")
     started_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
@@ -24,7 +24,7 @@ class ChatMessage(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     session_id: Mapped[int] = mapped_column(Integer, ForeignKey("chat_sessions.id"), nullable=False, index=True)
-    role: Mapped[str] = mapped_column(String(20), nullable=False)  # user, assistant
+    role: Mapped[str] = mapped_column(String(20), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 

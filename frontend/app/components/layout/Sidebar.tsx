@@ -61,7 +61,7 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
   const { user, logout } = useAuthStore();
 
   const handleLogout = async () => {
-    try { await api.post("/auth/logout"); } catch { /* ignore */ }
+    try { await api.post("/auth/logout"); } catch { }
     logout();
     router.replace("/login");
     onNavigate?.();
@@ -73,7 +73,6 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* Logo */}
       <a href="/" style={{ display: "flex", alignItems: "center", gap: "10px", padding: "18px 20px", minHeight: "68px", borderBottom: "1px solid var(--border)", flexShrink: 0, textDecoration: "none" }}>
         <img src="/logo.png" alt="SoulSide" style={{ width: "34px", height: "34px", borderRadius: "var(--r-md)", flexShrink: 0, objectFit: "cover" }} />
         <div>
@@ -82,7 +81,6 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
         </div>
       </a>
 
-      {/* User pill */}
       <button onClick={() => { router.push("/settings"); onNavigate?.(); }} style={{ margin: "14px 16px 4px", padding: "10px 12px", borderRadius: "var(--r-lg)", background: "var(--glass-1)", border: "1px solid var(--border)", display: "flex", alignItems: "center", gap: "10px", flexShrink: 0, cursor: "pointer", transition: "all var(--t-fast)", textAlign: "left" }}
         onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "var(--glass-hover)"; el.style.borderColor = "var(--border-hover)"; }}
         onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "var(--glass-1)"; el.style.borderColor = "var(--border)"; }}>
@@ -97,7 +95,6 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
         </div>
       </button>
 
-      {/* Main nav */}
       <nav style={{ flex: 1, overflowY: "auto", padding: "4px 0" }}>
         {NAV_MAIN.map(item => (
           <NavItem key={item.href} {...item} active={isActive(pathname, item.href)} onNavigate={onNavigate} />
@@ -142,12 +139,10 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Desktop sidebar */}
       <aside role="navigation" aria-label="Navigație" className="sidebar-desktop" style={{ ...sidebarStyle, position: "fixed", top: 0, left: 0 }}>
         <SidebarContent pathname={pathname} />
       </aside>
 
-      {/* Mobile: top bar */}
       <div className="mobile-header" style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 60,
         height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -164,12 +159,10 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div onClick={() => setMobileOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 70, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} />
       )}
 
-      {/* Mobile slide-in sidebar */}
       {mobileOpen && (
         <aside className="sidebar-mobile" role="navigation" aria-label="Navigație" style={{
           ...sidebarStyle,

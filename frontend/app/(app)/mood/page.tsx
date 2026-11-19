@@ -32,7 +32,6 @@ const DAYS_RO   = ["Lu","Ma","Mi","Jo","Vi","Sâ","Du"];
 const DAYS_FULL = ["Duminică","Luni","Marți","Miercuri","Joi","Vineri","Sâmbătă"];
 const MONTHS_RO = ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"];
 
-// Parse YYYY-MM-DD as local midnight — avoids UTC-midnight timezone shift
 const parseLocalDate = (s: string) => {
   const [y, m, d] = s.split("-").map(Number);
   return new Date(y, m - 1, d);
@@ -40,7 +39,6 @@ const parseLocalDate = (s: string) => {
 
 type CalEntry = { score: number; notes: string | null };
 
-/* ── Stats computation ── */
 function computeStats(logs: MoodLog[]) {
   if (!logs.length) return null;
   const now = new Date();
@@ -66,7 +64,6 @@ function computeStats(logs: MoodLog[]) {
   return { thisAvg, total: logs.length, trend, bestDay: bestDay?.label ?? null, worstDay: worstDay?.label ?? null };
 }
 
-/* ── Calendar ── */
 function MonthCalendar({ year, month, data, selectedDay, onDayClick }: {
   year:number; month:number; data:Record<string,CalEntry>;
   selectedDay:string|null; onDayClick:(d:string,e:CalEntry|null)=>void;
@@ -106,7 +103,6 @@ function MonthCalendar({ year, month, data, selectedDay, onDayClick }: {
   );
 }
 
-/* ── Custom Tooltip for chart ── */
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   const score = payload[0].value as number;
@@ -205,7 +201,6 @@ export default function MoodPage() {
   const prevMonth = () => { if (calMonth===0){setCalYear(y=>y-1);setCalMonth(11);}else setCalMonth(m=>m-1); };
   const nextMonth = () => { if (calMonth===11){setCalYear(y=>y+1);setCalMonth(0);}else setCalMonth(m=>m+1); };
 
-  /* ── Chart data ── */
   const chartData = (() => {
     const cutoff = subDays(new Date(), chartRange-1);
     const cutoffStr = format(cutoff,"yyyy-MM-dd");
@@ -216,7 +211,6 @@ export default function MoodPage() {
     }));
   })();
 
-  /* ── Stats ── */
   const stats = computeStats(logs);
 
   if (loading) return (
@@ -230,16 +224,13 @@ export default function MoodPage() {
   return (
     <div style={{ padding:"clamp(16px,4vw,36px)", width:"100%", boxSizing:"border-box" }}>
 
-      {/* Header */}
       <div className="anim-fade-up" style={{ marginBottom:"20px" }}>
         <h1 style={{ fontFamily:"var(--font-display)", fontWeight:900, fontSize:"clamp(20px,4vw,28px)", color:"var(--text-primary)", letterSpacing:"-0.025em", marginBottom:"6px" }}>Jurnal de dispoziție</h1>
         <p style={{ fontSize:"14px", color:"var(--text-muted)" }}>Înregistrează cum te simți astăzi și urmărește evoluția pe calendar.</p>
       </div>
 
-      {/* ── Stats chips row ── */}
       {stats && (
         <div className="anim-fade-up" style={{ display:"flex", flexWrap:"wrap", gap:"10px", marginBottom:"24px" }}>
-          {/* Media lunii */}
           <div className="glass-card" style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 18px", gap:"2px", minWidth:"110px", flex:"1 1 110px" }}>
             <span style={{ fontSize:"22px", fontWeight:900, fontFamily:"var(--font-display)", color:stats.thisAvg ? MOOD_CFG[Math.round(stats.thisAvg)].color : "var(--text-muted)" }}>
               {stats.thisAvg !== null ? stats.thisAvg.toFixed(1) : "—"}
@@ -247,25 +238,21 @@ export default function MoodPage() {
             <span style={{ fontSize:"10px", fontWeight:700, fontFamily:"var(--font-display)", color:"var(--text-muted)", letterSpacing:"0.06em", textTransform:"uppercase", textAlign:"center" }}>Media lunii</span>
           </div>
 
-          {/* Total înregistrări */}
           <div className="glass-card" style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 18px", gap:"2px", minWidth:"110px", flex:"1 1 110px" }}>
             <span style={{ fontSize:"22px", fontWeight:900, fontFamily:"var(--font-display)", color:"var(--accent-light)" }}>{stats.total}</span>
             <span style={{ fontSize:"10px", fontWeight:700, fontFamily:"var(--font-display)", color:"var(--text-muted)", letterSpacing:"0.06em", textTransform:"uppercase", textAlign:"center" }}>Total zile</span>
           </div>
 
-          {/* Cea mai bună zi */}
           <div className="glass-card" style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 18px", gap:"2px", minWidth:"110px", flex:"1 1 110px" }}>
             <span style={{ fontSize:"22px", fontWeight:900, fontFamily:"var(--font-display)", color:"#22c55e" }}>{stats.bestDay ?? "—"}</span>
             <span style={{ fontSize:"10px", fontWeight:700, fontFamily:"var(--font-display)", color:"var(--text-muted)", letterSpacing:"0.06em", textTransform:"uppercase", textAlign:"center" }}>Cea mai bună zi</span>
           </div>
 
-          {/* Cea mai proastă zi */}
           <div className="glass-card" style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 18px", gap:"2px", minWidth:"110px", flex:"1 1 110px" }}>
             <span style={{ fontSize:"22px", fontWeight:900, fontFamily:"var(--font-display)", color:"#f97316" }}>{stats.worstDay ?? "—"}</span>
             <span style={{ fontSize:"10px", fontWeight:700, fontFamily:"var(--font-display)", color:"var(--text-muted)", letterSpacing:"0.06em", textTransform:"uppercase", textAlign:"center" }}>Cea mai grea zi</span>
           </div>
 
-          {/* Tendință față de luna trecută */}
           <div className="glass-card" style={{ display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 18px", gap:"2px", minWidth:"130px", flex:"1 1 130px" }}>
             <span style={{ fontSize:"22px", fontWeight:900, fontFamily:"var(--font-display)", color: stats.trend === null ? "var(--text-muted)" : stats.trend >= 0 ? "#22c55e" : "#ef4444" }}>
               {stats.trend === null ? "—" : `${stats.trend >= 0 ? "+" : ""}${stats.trend.toFixed(1)}`}
@@ -275,10 +262,8 @@ export default function MoodPage() {
         </div>
       )}
 
-      {/* ── 2-column grid ── */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))", gap:"24px", alignItems:"start" }}>
 
-        {/* LEFT: Logger */}
         <div className="glass-card anim-fade-up" style={{ padding:"clamp(16px,4vw,28px)" }}>
           <div style={{ fontSize:"12px", color:"var(--text-muted)", fontFamily:"var(--font-display)", fontWeight:600, marginBottom:"20px" }}>
             {now.toLocaleDateString("ro-RO",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
@@ -305,7 +290,6 @@ export default function MoodPage() {
                 Editează înregistrarea de azi
               </button>
 
-              {/* AI Insight button */}
               <button onClick={fetchInsight} disabled={loadingInsight} className="btn-glass" style={{ width:"100%", fontSize:"13px", borderColor:"rgba(139,92,246,0.3)", color:showInsight?"var(--accent-light)":"var(--text-muted)" }}>
                 {loadingInsight
                   ? <><span className="spinner spinner-sm" />Se generează...</>
@@ -362,7 +346,6 @@ export default function MoodPage() {
           )}
         </div>
 
-        {/* RIGHT: Calendar */}
         <div className="glass-card anim-fade-up delay-2" style={{ padding:"clamp(16px,4vw,28px)" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"20px" }}>
             <h2 className="section-title" style={{ marginBottom:0 }}>Evoluție lunară</h2>
@@ -399,7 +382,6 @@ export default function MoodPage() {
             </div>
           )}
 
-          {/* Legend 1-10 */}
           <div style={{ marginTop:"16px", paddingTop:"14px", borderTop:"1px solid var(--border)" }}>
             <div style={{ fontSize:"11px", fontWeight:700, fontFamily:"var(--font-display)", color:"var(--text-muted)", letterSpacing:"0.06em", textTransform:"uppercase", marginBottom:"8px" }}>Legendă</div>
             <div style={{ display:"flex", gap:"4px", flexWrap:"wrap" }}>
@@ -414,7 +396,6 @@ export default function MoodPage() {
         </div>
       </div>
 
-      {/* ── Trend chart ── */}
       <div className="glass-card anim-fade-up delay-3" style={{ marginTop:"24px", padding:"clamp(16px,4vw,28px)" }}>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"20px", flexWrap:"wrap", gap:"12px" }}>
           <h2 className="section-title" style={{ marginBottom:0 }}>Trend dispoziție</h2>

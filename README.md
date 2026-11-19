@@ -1,8 +1,42 @@
+# SoulSide
+
+AI mental-health web app, built as my bachelor's thesis at West University of Timișoara (2026). Live at [soulside.ro](https://soulside.ro). The interface is in Romanian. *Documentația în română este mai jos.*
+
+## What it does
+
+- AI chat that answers from a curated knowledge base (RAG), with streamed responses (SSE)
+- Mood journal with a calendar heatmap, a trend chart and a weekly AI-generated insight
+- Resources: articles, videos, PDFs and guides, with search and favorites
+- Specialist directory with an appointment booking flow
+- Crisis page with immediate help resources (`/urgenta`)
+- Admin panel for adding PDFs to the knowledge base and managing users
+
+## How the RAG works
+
+PDFs uploaded by an admin are split into chunks, embedded with a HuggingFace `sentence-transformers` model and stored in PostgreSQL with pgvector. For each question, the backend runs an exact cosine-similarity search for the top 5 chunks above a minimum similarity. If the best match is weak, an LLM rewrites the query and the search runs again. The answer is generated with Groq, and only sources that pass a second grounding check are cited. In my evaluation, retrieval reached a precision@5 of about 0.81.
+
+## Authentication and security
+
+- Email OTP verification and password reset with single-use tokens
+- JWT in httpOnly cookies (15-minute access token, 7-day refresh token) with token versioning, so logging out or changing the password ends every session
+- Account lockout after 5 failed logins, plus per-IP rate limiting
+- bcrypt password hashing, security headers, restricted CORS, and PDF uploads checked by extension, MIME type and magic bytes
+
+## Stack
+
+Next.js 16, React 19, TypeScript, Tailwind CSS v4, Zustand · FastAPI, SQLAlchemy 2.0, Alembic · PostgreSQL 16 + pgvector · Groq API, LangChain, sentence-transformers · Resend for email · Deployed on an Oracle Cloud ARM VM (systemd, pm2, nginx, Let's Encrypt), with Neon as the managed database
+
+## Run locally
+
+Follow the Romanian guide below ("Pornire locală"): start the database with `docker-compose up -d`, then run the backend and the frontend.
+
+---
+
 # SoulSide 
 
 **Platformă AI de sănătate mentală** — chat conversațional cu RAG, tracker emoțional, jurnal zilnic, resurse curate și conectare cu specialiști.
 
-> FastAPI · Next.js 16 · PostgreSQL/pgvector · Groq · Deployat pe Railway + Vercel
+> FastAPI · Next.js 16 · PostgreSQL/pgvector · Groq · Deployat pe Oracle Cloud + Neon
 
 ---
 
@@ -27,7 +61,7 @@
 | **Bază de date** | PostgreSQL 16 + pgvector |
 | **AI / RAG** | Groq API, LangChain, HuggingFace `sentence-transformers` |
 | **Email** | Resend |
-| **Deployment** | Railway (backend), Vercel (frontend), Neon (bază de date) |
+| **Deployment** | Oracle Cloud (VM Ampere A1, Ubuntu) — backend via systemd/uvicorn, frontend via pm2; Neon (PostgreSQL managed); nginx reverse proxy + TLS Let's Encrypt |
 
 ---
 

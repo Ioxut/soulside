@@ -10,7 +10,7 @@ class ChatSessionCreate(BaseModel):
 class ChatSessionOut(BaseModel):
     id: int
     title: str
-    sentiment: str = "neutru"  # kept for DB compat, not used in UI
+    sentiment: str = "neutru"
     started_at: datetime
     ended_at: Optional[datetime]
     updated_at: Optional[datetime] = None

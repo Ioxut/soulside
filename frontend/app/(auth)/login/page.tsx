@@ -31,7 +31,6 @@ export default function LoginPage() {
       router.push(next);
     } catch (err: any) {
       if (err.response?.status === 403) {
-        // Account exists but was never verified → send a fresh code and finish sign-up.
         toast("Contul nu este verificat. Îți trimitem un cod nou.");
         router.push(`/register?verify=1&email=${encodeURIComponent(email)}`);
         return;

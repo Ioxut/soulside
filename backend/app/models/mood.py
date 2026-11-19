@@ -10,7 +10,7 @@ class MoodLog(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    score: Mapped[int] = mapped_column(Integer, nullable=False)  # 1-10
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
     emoji: Mapped[str] = mapped_column(String(10), nullable=False)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     logged_date: Mapped[date] = mapped_column(Date, nullable=False)

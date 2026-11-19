@@ -1,14 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 @import "tailwindcss";
 
-/* ── Tailwind theme tokens (violet) ── */
 @theme {
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-display: 'Nunito', system-ui, sans-serif;
   --color-space-950: #03020a;
 }
 
-/* ── Design tokens ── */
 :root {
   --bg-base: #03020a;
   --bg-deeper: #07050f;
@@ -63,7 +61,6 @@
   --r-full: 9999px;
 }
 
-/* ── Resets ── */
 *,
 *::before,
 *::after {
@@ -127,7 +124,6 @@ h4 {
   color: var(--text-primary);
 }
 
-/* ── Keyframes ── */
 @keyframes orbDrift1 {
 
   0%,
@@ -239,7 +235,6 @@ h4 {
   100% { background-position: 200% 0; }
 }
 
-/* ── Markdown in chat bubbles ── */
 .md-chat { line-height: 1.75; }
 .md-chat p { margin: 0 0 8px; }
 .md-chat p:last-child { margin-bottom: 0; }
@@ -276,7 +271,6 @@ h4 {
   }
 }
 
-/* ── Animation utilities ── */
 .anim-fade-up {
   animation: fadeUp 0.4s var(--t-slow) both;
 }
@@ -315,7 +309,6 @@ h4 {
   }
 }
 
-/* ── Spinner ── */
 .spinner {
   display: inline-block;
   flex-shrink: 0;
@@ -343,7 +336,6 @@ h4 {
   margin-right: 0;
 }
 
-/* ── Glass cards ── */
 .glass-card {
   background: var(--glass-1);
   backdrop-filter: blur(20px) saturate(140%);
@@ -376,7 +368,6 @@ h4 {
   box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
-/* ── Inputs ── */
 .glass-input {
   width: 100%;
   height: 48px;
@@ -402,7 +393,6 @@ h4 {
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-/* ── Buttons ── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -463,7 +453,6 @@ h4 {
   background: var(--glass-hover);
 }
 
-/* ── Helpers ── */
 .field-label {
   display: block;
   font-size: 12px;
@@ -512,7 +501,6 @@ h4 {
   margin: 8px 16px;
 }
 
-/* ── Layout ── */
 .app-main {
   margin-left: var(--sidebar-w);
   min-height: 100vh;
@@ -522,7 +510,6 @@ h4 {
   box-sizing: border-box;
 }
 
-/* ── Responsive ── */
 @media (max-width:768px) {
   .app-main {
     margin-left: 0 !important;
@@ -571,7 +558,6 @@ h4 {
   }
 }
 
-/* ── Rich text editor (TipTap) ── */
 .tiptap {
   outline: none;
 }
@@ -624,7 +610,6 @@ h4 {
 .tiptap em { font-style: italic; }
 .tiptap u { text-decoration: underline; text-underline-offset: 2px; }
 
-/* Placeholder */
 [data-placeholder]::before {
   content: attr(data-placeholder);
   position: absolute;
@@ -636,7 +621,6 @@ h4 {
   opacity: 0.5;
 }
 
-/* ── Article reader typography (blog-modern) ── */
 .article-body {
   font-size: 16px;
   line-height: 1.85;

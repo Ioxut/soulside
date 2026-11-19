@@ -28,13 +28,11 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // OTP step
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [resending, setResending] = useState(false);
   const codeRefs = useRef<(HTMLInputElement | null)[]>([]);
   const autoSent = useRef(false);
 
-  // Coming from login as an unverified account → jump straight to the OTP step.
   useEffect(() => {
     const verify = searchParams.get("verify");
     const presetEmail = searchParams.get("email");
@@ -93,7 +91,6 @@ export default function RegisterPage() {
     }
   };
 
-  // ── OTP handlers ──
   const handleCodeChange = (val: string, idx: number) => {
     const digit = val.replace(/\D/g, "").slice(-1);
     const next = [...code];
